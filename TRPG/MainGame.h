@@ -4,10 +4,6 @@
 #include "CMonster.h"
 #include "CSelectNum.h"
 
-//game, isWin 포인터로 옮겨주기
-
-//과정들 함수화???
-
 class MainGame
 {
 private:
@@ -16,23 +12,37 @@ private:
 	string huntList[3] = { "사냥터", "저장하기", "종료" };
 	string monsterList[4] = { "초급", "중급", "고급", "전 단계" };
 	string attackList[2] = { "공격", "도망" };
+	
 	int m_GameStage;
 	bool isRunning; 
 
-	CPlayer* m_pPlayer;
-	CMonster* m_pMonster;
+	CObject* m_pPlayer;
+	CObject* m_pMonster;
 
 	CSelectNum SelectJob;
 	CSelectNum SelectHunt;
 	CSelectNum SelectMonster;
 	CSelectNum SelectAttack;
 
-	int* m_pGameNum;
-	bool* m_pIsWin;
+	//int* m_pGameNum;
+	bool m_bIsWin;
 	
 public:
 	MainGame();
 	~MainGame();
+
+	static MainGame* Create()
+	{
+		MainGame* pMainGame = new MainGame;
+
+		return pMainGame;
+	}
+
+	void Destroy()
+	{
+		if (this != nullptr)
+			delete this;
+	}
 
 public:
 public:

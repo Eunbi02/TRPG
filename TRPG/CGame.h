@@ -1,36 +1,47 @@
 #pragma once
-
-class CMiniGame1;
+#include "pch.h"
+#include "Define.h"
 
 class CGame{
-private:
-	int* m_pLevel;
-	int* m_pGameNum;
-	bool* m_pIsWin;
-
-	CMiniGame1* MiniGame1;
-
+protected:
+	int m_iLevel;
+	bool* const m_bIsLose;
 public:
 	CGame();
-	explicit CGame(int* _level, int* _gameNum, bool* _isLose);
-	~CGame();
+	explicit CGame(int _iLevel, bool* _bIsLose);
+	virtual ~CGame();
+
 
 public:
-	int* GetLevel()	const { return m_pLevel; };
-	int* GetNum()	const { return m_pGameNum; };
+	int GetLevel()	const { return m_iLevel; };
+	bool GetIsLose() const { return *m_bIsLose; };
 
-	void SetLevel(int* _level);
-	void SetGameNum(int* _num);
-	void SetIsWin(bool* _isWin);
-	void SetLevel(int level);
-	void SetGameNum(int num);
+	void SetLevel(int _iLevel);
+	void SetIsLose(int _bIsLose);
+	
 
 public:
-	void	Initialize(); //게임들을 초기화
-	void	Update(); //아직 빈 함수
-	void	Release();
+	virtual void	Initialize()	= 0;
+	virtual void	Update()		= 0;
+	virtual void	Release()		= 0;
 
+	virtual void	PlayGame()		= 0;
+
+
+	// minigame1 함수
 public:
-	void PlayGame();
+	virtual void MakeAnswer() { return; };
+	virtual void StrikeBall() { return; };
+	
+	// minigame2 함수
+public:
+	virtual void BingoSuffle()		{ return; };
+	virtual void MakeComBingo()		{ return; };
+	virtual void MakeUserBingo()	{ return; };
+
+	virtual void ArrIdx(int** _Bingo, int _iElement, int* _pIdx1, int* _pIdx2) { return; };
+	virtual void BingoCheck(int** _iBingo, int _iIdx1, int _iIdx2, int* _iBNum) { return; };
+
+	virtual void PrintBingo(int** _Arr) { return; };
 
 };

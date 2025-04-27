@@ -1,6 +1,6 @@
 #include "MainGame.h"
 
-
+int CMonster::m_iMonsterKilled = 0;
 
 MainGame::MainGame() :
 	isRunning(true),
@@ -13,11 +13,13 @@ MainGame::MainGame() :
 	SelectMonster(4, "몬스터 난이도 선택", monsterList),
 	SelectAttack(2, "공격도망 선택", attackList),
 
-	m_pGameNum(nullptr),
-	m_pIsWin(nullptr)
+	//m_pGameNum(nullptr),
+	m_bIsWin(0)
 {
 	cout << "메인게임 생성자 생성" << endl;
 }
+
+
 
 MainGame::~MainGame()
 {
@@ -26,28 +28,21 @@ MainGame::~MainGame()
 
 void MainGame::Initialize()
 {
-	if (!m_pGameNum){ m_pGameNum = new int(0); }
-	
-	if (!m_pIsWin) { m_pIsWin = new bool(false); }
 	
 	if (!m_pPlayer) {
-		m_pPlayer = new CPlayer;
+		m_pPlayer = CPlayer::Create();
 	}
 	m_pPlayer->Initialize();
 
 	m_GameStage = NAME;
+
 }
 
-void MainGame::InitializeMonster()
+void MainGame::InitializeMonster() //기본 생성
 {
 	if (!m_pMonster) {
-		m_pMonster = new CMonster; //cgame 생성자 까지
+		m_pMonster = CMonster::Create();
 	}
-	m_pMonster->Initialize();
-
-	/*int		level = 1;
-	int		gameNum = 0;
-	bool	isLose = false;*/
 }
 
 void MainGame::Update()
@@ -68,7 +63,7 @@ void MainGame::Update()
 			system("pause");
 		}
 
-
+		//{ "전사", "마법사", "도적", "불러오기" }
 		while (m_GameStage == JOB) {
 			system("cls");
 
@@ -90,6 +85,7 @@ void MainGame::Update()
 			system("pause");
 		}
 
+		//{ "사냥터", "저장하기", "종료" };
 		while (m_GameStage == HUNT) {
 			system("cls");
 
@@ -128,15 +124,9 @@ void MainGame::Update()
 			SelectMonster.Print();
 			cin >> iInput;
 			if (0 < iInput && iInput < SelectMonster.GetSelectSize()) {
-				m_pMonster->SetName(SelectMonster.GetElementName(iInput - 1));
-				m_pMonster->SetLevel(iInput); //monster에 level, win, gamenum 전달
-				m_pMonster->SetIsLose(m_pIsWin);
-
-				//게임 고르는 것.
-				/*srand(unsigned int(time(nullptr)));
-				*m_pGameNum = rand() % 3 + 1;*/
-				*m_pGameNum = 1;				//아직 게임 1개라 무조건 1 대입
-				m_pMonster->SetGameNum(m_pGameNum);
+				m_pMonster->SetMonsterLevel(iInput); //레벨에 따라 mp,exp 할당
+				//m_pMonster->SetIsLose(m_bIsWin);
+				
 
 				m_GameStage++;
 			}
@@ -146,33 +136,64 @@ void MainGame::Update()
 			else
 				cout << "잘못 입력 하셨습니다" << endl;
 
-			m_pMonster->SetGame();//gmae에 level,gamenum,win 전해주고 initialize(minigame 인자 생성자 호출, initialize, makeanswer)
+			
 			system("pause");
 		}
 
+		//{ "공격", "도망" };
 		while (m_GameStage == FIGHT) {
 			system("cls");
 
+			m_pMonster->SetGameNum(); //랜덤으로 미니 게임 생성
+			m_pMonster->SetGame();
+
 			m_pPlayer->Print();
 			m_pMonster->Print();
+			cout << "처치한 몬스터 수 : " << CMonster::m_iMonsterKilled << endl;
 			SelectAttack.Print();
 			cin >> iInput;
 
 			if (0 < iInput && iInput <= SelectAttack.GetSelectSize()) {
 				if (iInput == 1) { // 공격
-					m_pMonster->PlayGame();  // 게임 진행 호출
+					while (m_pMonster->GetHp() != 0 && m_pPlayer->GetHp() != 0) // 몬스터 || 플래이어 죽을 때 까지
+					{
+						system("cls");
+						m_pMonster->SetGame();
+						m_pMonster->Print();
+						cout << "몬스터를 처치하세요!" << endl;
+						system("pause");
+						m_pMonster->PlayGame();  // 게임 진행 호출
 
-					if (*m_pIsWin==true) { // 플레이어 승리 시
-						m_pPlayer->LevelUp(m_pMonster->GetMp());  // 경험치 획득
+						if (m_pMonster->GetIsLose()) { // 플레이어 승리 시
+							m_pMonster->Attacked(m_pPlayer->GetAttack(), m_pPlayer->GetExp()); //몬스터에게 공격
+							m_pPlayer->LevelUp(m_pMonster->GetExp());  // 경험치 획득
+							 
+						}
+						else { // 몬스터 승리 시
+							m_pPlayer->Attacked(m_pMonster->GetAttack(), m_pMonster->GetExp()); //몬스터에게 피공격
+						}
 					}
-					else { // 몬스터 승리 시
-						m_pPlayer->Attacked(m_pMonster->GetAttack(), m_pMonster->GetMp());
+
+					// 몬스터 게임 후 처리
+					if (m_pMonster->GetHp() == 0) {
+						system("cls");
+						cout << "몬스터 처치에 성공하셨습니다!" << endl;
+						system("pause");
+						CMonster::CountMonsterKill(); //몬스터 킬수 카운트
+						SAFE_DELETE(m_pMonster);  // 게임 후 몬스터 삭제
+						m_GameStage--;  // 게임 단계 변경
+					}
+					if (m_pPlayer->GetHp() == 0) {
+						system("cls");
+						cout << "몬스터 처치에 실패하셨습니다!" << endl;
+						system("pause");
+						SAFE_DELETE(m_pPlayer);  // 게임 후 플레이어 삭제
+						m_GameStage = END;  // 게임 단계 변경
 					}
 				}
-
-				// 몬스터 게임 후 처리
-				SAFE_DELETE(m_pMonster);  // 게임 후 몬스터 삭제
-				m_GameStage--;  // 게임 단계 변경
+				
+				
+				
 			}
 			else {
 				cout << "잘못 입력 하셨습니다" << endl;
@@ -193,6 +214,4 @@ void MainGame::Release()
 {
 	SAFE_DELETE(m_pPlayer);
 	SAFE_DELETE(m_pMonster);
-	SAFE_DELETE(m_pGameNum);
-	SAFE_DELETE(m_pIsWin);
 }

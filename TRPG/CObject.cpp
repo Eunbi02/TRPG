@@ -1,72 +1,64 @@
 #include "pch.h"
 #include "CObject.h"
 
-//생성자와 소멸자
-CObject::CObject() : m_strName("Unknown"), m_iHp(100), m_iMp(0), m_iAttack(10) {
-	cout << "기본 오브젝트 생성" << endl;
+CObject::CObject()
+	: m_tagINFO({ "Unknown", 100, 0, 10, 1 }) {
 }
 
-CObject::CObject(string _sName, int _iHp, int _iMp, int _iAttack)
-	: m_strName(_sName), m_iHp(_iHp) ,m_iMp(_iMp), m_iAttack(_iAttack) {
-	cout << this->m_strName << " 생성자 생성" << endl;
+CObject::CObject(string _sName, int _iHp, int _iExp, int _iAttack,int _iLevel) {
+	m_tagINFO.strName = _sName;
+	m_tagINFO.iHp = _iHp;
+	m_tagINFO.iExp = _iExp;
+	m_tagINFO.iAttack = _iAttack;
+	m_tagINFO.iLevel = _iLevel;
 }
-
-CObject::CObject(const CObject& other)
-	: m_strName(other.m_strName),m_iHp(other.m_iHp), m_iMp(other.m_iMp), m_iAttack(other.m_iAttack){
-	cout << "복사 생성자 호출됨: " << m_strName << endl;
-}
-
 CObject::~CObject() {
-	cout << this->m_strName << "생성자 삭제 " << endl;
+	cout << this->m_tagINFO.strName << "생성자 삭제 " << endl;
 }
-
-//getter 함수들
-
 
 
 //setter 함수들
 void CObject::SetHp(int _hp) {
 	if (_hp >= 0)
-		this->m_iHp = _hp;
+		this->m_tagINFO.iHp = _hp;
 }
-void CObject::SetMp(int _mp) {
-	if (_mp >= 0)
-		this->m_iMp = _mp;
+void CObject::SetExp(int _exp) {
+	if (_exp >= 0)
+		this->m_tagINFO.iExp = _exp;
 }
 void CObject::SetAttack(int _attack) {
 	if (_attack >= 0)
-		this->m_iAttack = _attack;
+		this->m_tagINFO.iAttack = _attack;
+}
+
+void CObject::SetLevel(int _level)
+{
+	if (_level >= 0)
+		this->m_tagINFO.iLevel = _level;
 }
 
 void CObject::SetName(string _name)
 {
-	this->m_strName = _name;
+	this->m_tagINFO.strName = _name;
 }
-
-void CObject::Initialize()
-{
-	m_strName	="Unknown";
-	m_iHp		= 100;
-	m_iMp		= 0;
-	m_iAttack	= 10;
-}
-
-void CObject::Update()
-{
-}
-
-void CObject::Release()
-{
-}
-
 
 
 
 //자기 print 함수
 void CObject::Print() const {
 	cout << "=====================================" << endl;
-	cout << "이름 : " << this->m_strName	<< "\t경험치 : "	<< this->m_iMp		<< endl;
-	cout << "체력 : " << this->m_iHp		<< "\t공격 : "	<< this->m_iAttack	<< endl;
+	cout << "이름 : " << this->m_tagINFO.strName << "\t레벨 : " << m_tagINFO.iLevel << endl;
+	cout << "체력 : " << this->m_tagINFO.iHp		<< "\t공격 : "	<< this->m_tagINFO.iAttack	<< endl;
+	cout << "경험치 : " << this->m_tagINFO.iExp << endl;
+}
+
+void CObject::Attacked(int _attacked, int _exp) {
+	//공격 당함
+	this->m_tagINFO.iHp -= _attacked;
+	if (m_tagINFO.iHp < 0) m_tagINFO.iHp = 0;
+
+	this->m_tagINFO.iExp -= _exp;
+	if (m_tagINFO.iExp < 0) m_tagINFO.iExp = 0;
 }
 
 

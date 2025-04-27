@@ -5,11 +5,19 @@
 
 int main()
 {
-    MainGame Game;
-
     srand(unsigned int(time(nullptr)));
-    Game.Initialize();
-    Game.Update();
+    
+    //MainGame Game;
+
+    /*Game.Initialize();
+    Game.Update();*/
+
+    MainGame* pGame = MainGame::Create();
+    pGame->Initialize();
+    pGame->Update();
+    pGame->Destroy();
+
+    delete pGame;
     
     return 0;
 }

@@ -1,2 +1,24 @@
-﻿  CMiniGame1.cpp
-  TRPG.vcxproj -> C:\jusin\숙제\TRPG\x64\Debug\TRPG.exe
+﻿  CGame.cpp
+  CMiniGame2.cpp
+C:\jusin\숙제\TRPG\TRPG\CMiniGame2.h(40,7): error C3668: 'CMiniGame2::ArrIdx': 재정의 지정자 'override'가 있는 메서드가 기본 클래스 메서드를 재정의하지 않았습니다.
+  (소스 파일 'CMiniGame2.cpp'을(를) 컴파일하는 중)
+  
+C:\jusin\숙제\TRPG\TRPG\CMiniGame2.h(41,7): error C3668: 'CMiniGame2::BingoCheck': 재정의 지정자 'override'가 있는 메서드가 기본 클래스 메서드를 재정의하지 않았습니다.
+  (소스 파일 'CMiniGame2.cpp'을(를) 컴파일하는 중)
+  
+C:\jusin\숙제\TRPG\TRPG\CMiniGame2.h(43,7): error C3668: 'CMiniGame2::PrintBingo': 재정의 지정자 'override'가 있는 메서드가 기본 클래스 메서드를 재정의하지 않았습니다.
+  (소스 파일 'CMiniGame2.cpp'을(를) 컴파일하는 중)
+  
+  Define.h
+  CMonster.cpp
+C:\jusin\숙제\TRPG\TRPG\CMiniGame2.h(40,7): error C3668: 'CMiniGame2::ArrIdx': 재정의 지정자 'override'가 있는 메서드가 기본 클래스 메서드를 재정의하지 않았습니다.
+  (소스 파일 'CMonster.cpp'을(를) 컴파일하는 중)
+  
+C:\jusin\숙제\TRPG\TRPG\CMiniGame2.h(41,7): error C3668: 'CMiniGame2::BingoCheck': 재정의 지정자 'override'가 있는 메서드가 기본 클래스 메서드를 재정의하지 않았습니다.
+  (소스 파일 'CMonster.cpp'을(를) 컴파일하는 중)
+  
+C:\jusin\숙제\TRPG\TRPG\CMiniGame2.h(43,7): error C3668: 'CMiniGame2::PrintBingo': 재정의 지정자 'override'가 있는 메서드가 기본 클래스 메서드를 재정의하지 않았습니다.
+  (소스 파일 'CMonster.cpp'을(를) 컴파일하는 중)
+  
+  pch.h
+  코드를 생성하고 있습니다...

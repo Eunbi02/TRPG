@@ -1,41 +1,69 @@
 #pragma once
 #include "pch.h"
+#include "Define.h"
 
+//추상 클래스
 
 class CObject {
 protected: 
-	string m_strName;
-	int m_iHp;
-	int m_iMp;
-	int m_iAttack;
+	INFO m_tagINFO;
 
 	// 생성자와 소멸자
 public:
-	CObject();
-	explicit CObject(string _sName, int _iHp, int _iMp, int _iAttack);
-	explicit CObject(const CObject& other);
-	~CObject();
+	CObject(); // 기본 생성자
+	explicit CObject(string _sName, int _iHp, int _iExp, int _iAttack, int _iLevel);
+	virtual ~CObject();
+
 
 	// getter,setter func
 public:
-	string	GetName()	const { return m_strName; }
-	int		GetHp()		const { return m_iHp; }
-	int		GetMp()		const { return m_iMp; }
-	int		GetAttack() const { return m_iAttack; }
+	INFO	Get_Info()	const { return m_tagINFO; }
+	string	GetName()	const { return this->m_tagINFO.strName; }
+	int		GetHp()		const { return this->m_tagINFO.iHp; }
+	int		GetExp()		const { return this->m_tagINFO.iExp; }
+	int		GetAttack() const { return this->m_tagINFO.iAttack; }
+	int		GetLevel()	const { return this->m_tagINFO.iLevel; }
 
 	void	SetHp(int _hp);
-	void	SetMp(int _mp);
+	void	SetExp(int _mp);
 	void	SetAttack(int _attack);
+	void	SetLevel(int _level);
 	void	SetName(string _name);
 
 public:
-	void	Initialize();
-	void	Update(); //아직 빈 함수
-	void	Release(); //아직 빈 함수
+	virtual void	Initialize() =0;
+	virtual void	Update() = 0; //아직 빈 함수
+	virtual void	Release() = 0; //아직 빈 함수
 
-	// 그 외 기능 함수들
+	// 기능 함수들
 public:
 	//자기 print 함수
 	virtual void Print() const;
+	void Attacked(int _attacked, int _mp);
+
+	//player 함수
+public:
+	
+	virtual int		GetDefense()	const { return 0; };
+	virtual string	GetJob()		const { return ""; };
+
+	
+	virtual void	SetDefense(int _defense)	{ return; };
+	virtual void	SetJob(string _job)			{ return; };
+
+	virtual void	LevelUp(int _mp)			{ return; };
+
+
+	//monster 함수
+public:
+	virtual int		GetGameNum()	const { return 0; };
+	virtual bool	GetIsLose()		const { return 0; };
+	
+	virtual void	SetMonsterLevel(int _level) { return; };
+	virtual void	SetGameNum()				{ return; };
+	virtual void	SetIsLose(bool* _isLose)	{ return; };
+	
+	virtual void	SetGame()	{ return; };
+	virtual void	PlayGame()	{ return; };
 
 };

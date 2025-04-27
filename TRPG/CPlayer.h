@@ -5,40 +5,62 @@ class CMonster;
 
 class CPlayer : public CObject {
 private:
-	int m_iLevel;
+
 	int m_iDefense;
-	int m_iMaxMp;
+	int m_iMaxExp;
 	string m_strJob;
+
+	CPlayer();
+	explicit CPlayer(string _name, string _job, int _hp,
+		int _mp, int _attack, int _level, int _defense, int _maxMp);
+	virtual ~CPlayer();
 
 	// 持失切 社瑚切
 public:
-	CPlayer();
-	explicit CPlayer(string _name, string _job,int _hp, 
-		int _mp, int _attack, int _level, int _defense, int _maxMp);
-	~CPlayer();
+	
+
+	static CObject* Create()
+	{
+		CObject* pCPlayer = new CPlayer;
+
+		return pCPlayer;
+	}
+
+	static CObject* Create(string _name, string _job, int _hp,
+		int _mp, int _attack, int _level, int _defense, int _maxMp)
+	{
+		CObject* pCPlayer = new CPlayer (_name, _job, _hp,
+			_mp, _attack, _level, _defense, _maxMp);
+
+		return pCPlayer;
+	}
+
+	void Destroy()
+	{
+		if (this != nullptr)
+			delete this;
+	}
 
 	// get, set func
 public:
 
-	int		GetLevel()		const { return m_iLevel; };
 	int		GetDefense()	const { return m_iDefense; };
 	string	GetJob()		const { return m_strJob; };
 
 
-	void SetLevel(int _level);
-	void SetDefense(int _defense);
-	void SetJob(string _job);
+	void SetDefense(int _defense)override;
+	void SetJob(string _job)override;
 
 public:
-	void	Initialize();
-	void	Update();
-	void	Release();
+	void	Initialize()override;
+	void	Update()override;
+	void	Release()override;
 
 	
 public:
 	//print override
 	void Print() const override;
 
-	void Attacked(int _attacked, int _mp);
-	void LevelUp(int _mp);
+	//void Attacked(int _attacked, int _mp);
+	void LevelUp(int _mp) override;
 };

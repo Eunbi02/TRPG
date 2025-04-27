@@ -128,10 +128,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CGame.cpp" />
+    <ClCompile Include="CItem.cpp" />
     <ClCompile Include="CMiniGame1.cpp" />
+    <ClCompile Include="CMiniGame2.cpp" />
     <ClCompile Include="GameSetting.cpp" />
     <ClCompile Include="Define.h" />
     <ClCompile Include="CMonster.cpp" />
+    <ClCompile Include="Global.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="pch.h" />
@@ -140,10 +143,15 @@
     <ClCompile Include="CSelectNum.cpp" />
     <ClCompile Include="SaveLoadFile.cpp" />
     <ClCompile Include="TRPG.cpp" />
+    <ClCompile Include="연습장.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CGame.h" />
+    <ClInclude Include="CItem.h" />
     <ClInclude Include="CMiniGame1.h" />
+    <ClInclude Include="CMiniGame2.h" />
     <ClInclude Include="CMonster.h" />
     <ClInclude Include="CObject.h" />
     <ClInclude Include="CPlayer.h" />

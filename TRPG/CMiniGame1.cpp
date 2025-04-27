@@ -1,12 +1,7 @@
 #include "CMiniGame1.h"
-//#include "GamePointer.h"
 
-CMiniGame1::CMiniGame1()
+CMiniGame1::CMiniGame1() : CGame(1,nullptr)
 {
-	m_pLevel = nullptr;
-	//m_iGameNum = nullptr;
-	m_pIsWin = nullptr;
-
 	m_iStrike	= 0;
 	m_iBall		= 0;
 	m_iRound	= 0;
@@ -18,18 +13,14 @@ CMiniGame1::CMiniGame1()
 	m_iGuess	= new int[m_iSize];
 }
 
-CMiniGame1::CMiniGame1(int* _level, bool* _isWin)
+CMiniGame1::CMiniGame1(int _iLevel, bool* _bIsLose)
+	: CGame(_iLevel, _bIsLose)
 {
-	m_pLevel = _level;
-	//m_iGameNum = 1;
-	m_pIsWin = _isWin;
-
 	m_iStrike = 0;
 	m_iBall = 0;
 	m_iRound = 0;
 	
-
-	switch (*_level) { //default 시 level = 3
+	switch (m_iLevel) { //default 시 level = 3
 		case 1:
 			m_iMaxRound = 9;
 			m_iNum = 9;
@@ -45,7 +36,7 @@ CMiniGame1::CMiniGame1(int* _level, bool* _isWin)
 			m_iMaxRound = 9;
 			m_iNum = 15;
 			m_iSize = 5;
-			*m_pLevel = 3; //예외값 넣었을때 처리
+			m_iLevel = 3; //예외값 넣었을때 처리
 			break;
 	}
 
@@ -59,19 +50,15 @@ CMiniGame1::~CMiniGame1()
 	Release();
 }
 
-void CMiniGame1::SetLevel(int* _level)
-{
-	m_pLevel = _level;
-}
 
 void CMiniGame1::Initialize()
 {
-	/*m_iStrike = 0;
+	m_iStrike = 0;
 	m_iBall = 0;
-	m_iRound = 0;*/
+	m_iRound = 0;
 
 
-	switch (*m_pLevel) { //default 시 level = 3
+	switch (m_iLevel) { //default 시 level = 3
 	case 1:
 		m_iMaxRound = 9;
 		m_iNum = 9;
@@ -87,12 +74,9 @@ void CMiniGame1::Initialize()
 		m_iMaxRound = 12;
 		m_iNum = 9;
 		m_iSize = 5;
-		*m_pLevel = 3; //예외값 넣었을때 처리
+		m_iLevel = 3; //예외값 넣었을때 처리
 		break;
 	}
-
-	/*m_iAnswer = new int[m_iSize];
-	m_iGuess = new int[m_iSize];*/
 
 	// 기존 배열 해제
 	SAFE_DELETE_ARRAY(m_iAnswer);
@@ -119,10 +103,10 @@ void CMiniGame1::Release()
 
 void CMiniGame1::MakeAnswer()
 {
-	int* pArr = new int[m_iNum];
-
 	SAFE_DELETE_ARRAY(m_iAnswer);
-	m_iAnswer = new int[m_iSize];  // ★ 재할당 추가
+	m_iAnswer = new int[m_iSize];
+
+	int* pArr = new int[m_iNum];
 
 	for (int i = 0; i < m_iNum; ++i)
 	{
@@ -159,9 +143,13 @@ void CMiniGame1::StrikeBall()
 
 void CMiniGame1::PlayGame()
 {
-	cout << "총 " << m_iMaxRound << "회" << endl;
+	//check용
+	for (int i = 0; i < m_iSize; i++) {
+		cout << m_iAnswer[i] << '\t';
+	}
+	cout << endl;
 	while (m_iRound < m_iMaxRound) {
-		cout << m_iRound + 1 << " 회" << endl;
+		cout << "총 " << m_iMaxRound << "회 중 현재" << m_iRound + 1 << " 회" << endl;
 		cout << "1부터 " << m_iNum << "까지 숫자 중에서 "<< m_iSize << "만큼 입력(중복x)";
 		for (int i = 0; i < m_iSize; i++) {
 			cin >> m_iGuess[i];
@@ -173,10 +161,10 @@ void CMiniGame1::PlayGame()
 		cout << endl;
 
 		//이닝 종료 여부 판정
-		if (m_iStrike == 3) {
+		if (m_iStrike == m_iSize) {
 			//cout << "정답은 " << iAnswer << "이었습니다" << endl; //check 용
 			cout << m_iRound + 1 << "회 종료!\n" << "승리 하셨습니다" << endl;
-			*m_pIsWin = true;
+			*m_bIsLose = true;
 			return;
 		}
 		
@@ -186,5 +174,5 @@ void CMiniGame1::PlayGame()
 	//9회까지 못 맞췄을때 출력
 	//cout << "정답은 " << iAnswer << "이었습니다" << endl; //check 용
 	cout << "패배 하셨습니다." << endl;
-	*m_pIsWin = false;
+	*m_bIsLose = false;
 }
